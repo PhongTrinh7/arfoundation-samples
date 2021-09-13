@@ -16,6 +16,14 @@ namespace UnityEngine.XR.ARFoundation.Samples
     public class PlaceOnPlane : MonoBehaviour
     {
         [SerializeField]
+        [Tooltip("The main camera in use.")]
+        Camera m_Camera;
+
+        [SerializeField]
+        [Tooltip("Displays this cursor to indicate object placement.")]
+        GameObject m_Cursor;
+
+        [SerializeField]
         [Tooltip("Instantiates this prefab on a plane at the touch location.")]
         GameObject m_PlacedPrefab;
 
@@ -38,42 +46,45 @@ namespace UnityEngine.XR.ARFoundation.Samples
             m_RaycastManager = GetComponent<ARRaycastManager>();
         }
 
-        bool TryGetTouchPosition(out Vector2 touchPosition)
-        {
-            if (Input.touchCount > 0)
-            {
-                touchPosition = Input.GetTouch(0).position;
-                return true;
-            }
-
-            touchPosition = default;
-            return false;
-        }
-
         void Update()
         {
-            if (!TryGetTouchPosition(out Vector2 touchPosition))
-                return;
+            TryGetSnapPoint();
+        }
 
-            if (m_RaycastManager.Raycast(touchPosition, s_Hits, TrackableType.PlaneWithinPolygon))
+        void TryGetSnapPoint()
+        {
+            RaycastHit hit;
+
+            if (Physics.Raycast(m_Camera.ScreenPointToRay(transform.position), out hit))
             {
-                // Raycast hits are sorted by distance, so the first one
-                // will be the closest hit.
-                var hitPose = s_Hits[0].pose;
-
-                if (spawnedObject == null)
+                if (hit.collider.gameObject.CompareTag("SnapPoint"))
                 {
-                    spawnedObject = Instantiate(m_PlacedPrefab, hitPose.position, hitPose.rotation);
+                    hit.collider.gameObject.GetComponent<MeshRenderer>().enabled = true;
+
+                    if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
+                    {
+                        Instantiate(m_PlacedPrefab, hit.collider.transform);
+                    }
                 }
                 else
                 {
-                    spawnedObject.transform.position = hitPose.position;
+                    if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
+                    {
+                        if (m_RaycastManager.Raycast(m_Camera.ViewportToScreenPoint(new Vector2(0.5f, 0.5f)), s_Hits, TrackableType.PlaneWithinPolygon))
+                        {
+                            // Raycast hits are sorted by distance, so the first one
+                            // will be the closest hit.
+                            var hitPose = s_Hits[0].pose;
+
+                            Instantiate(m_PlacedPrefab, hitPose.position, hitPose.rotation);
+                        }
+                    }
                 }
             }
         }
 
         static List<ARRaycastHit> s_Hits = new List<ARRaycastHit>();
-
         ARRaycastManager m_RaycastManager;
+        GameObject blockHolder;
     }
 }
