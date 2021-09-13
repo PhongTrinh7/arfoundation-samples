@@ -1328,7 +1328,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1024
   m_Camera: {fileID: 282840813}
-  cursor: {fileID: 0}
+  cursor: {fileID: 1198750149}
   cursorHighlightColor: {r: 1, g: 0, b: 0, a: 1}
   placablePrefabs:
   - {fileID: 1934569588295450, guid: dd6c3ca24e7820c42890723d5d2ff6ac, type: 3}

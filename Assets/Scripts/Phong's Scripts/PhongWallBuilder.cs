@@ -76,7 +76,6 @@ namespace UnityEngine.XR.ARFoundation.Samples
                 if (hit.collider.CompareTag("SnapPoint"))
                 {
                     Instantiate(placablePrefabs[placableIndex], hit.transform.position, hit.transform.rotation, blockHolder.transform);
-
                     return true;
                 }
             }
