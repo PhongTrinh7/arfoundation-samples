@@ -52,7 +52,7 @@ namespace UnityEngine.XR.ARFoundation.Samples
 
         void CursorOverSnapPoint()
         {
-            Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+            Ray ray = m_Camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
             RaycastHit hit;
 
             if (Physics.Raycast(ray, out hit, layerMask))
@@ -68,7 +68,7 @@ namespace UnityEngine.XR.ARFoundation.Samples
 
         bool CheckSnapPoint(int placableIndex)
         {
-            Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+            Ray ray = m_Camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
             RaycastHit hit;
 
             if (Physics.Raycast(ray, out hit, layerMask))
@@ -145,7 +145,7 @@ namespace UnityEngine.XR.ARFoundation.Samples
         GameObject blockHolder;
     }
 
-    public class WallSave
+    private class WallSave
     {
         public List<Vector3> blockPositions = new List<Vector3>();
         //Save color.
