@@ -145,7 +145,7 @@ namespace UnityEngine.XR.ARFoundation.Samples
         GameObject blockHolder;
     }
 
-    private class WallSave
+    class WallSave
     {
         public List<Vector3> blockPositions = new List<Vector3>();
         //Save color.
